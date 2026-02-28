@@ -1,0 +1,123 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "accessibilityAddLocation" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Double tap to add custom latitude and longitude coordinates"
+          }
+        }
+      }
+    },
+    "accessibilityErrorWikipedia" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wikipedia app not installed or unavailable. Please install from App Store."
+          }
+        }
+      }
+    },
+    "accessibilityLoadingMessage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading locations from remote server. Please wait"
+          }
+        }
+      }
+    },
+    "accessibilityOpenWikipedia" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Double tap to search %1$(name)@  coordinates longitude: %2$(long)@ , latitude:  %3$(lat)@  in Wikipedia Places tab"
+          }
+        }
+      }
+    },
+    "addLocation" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Location"
+          }
+        }
+      }
+    },
+    "appTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Places Wiki"
+          }
+        }
+      }
+    },
+    "invalidCoordinates" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter valid coordinates (e.g., 52.3547, 4.8339)"
+          }
+        }
+      }
+    },
+    "latitudeLabel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latitude"
+          }
+        }
+      }
+    },
+    "loadingLocations" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading locations..."
+          }
+        }
+      }
+    },
+    "longitudeLabel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Longitude"
+          }
+        }
+      }
+    },
+    "unnamedLocation" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unnamed Location"
+          }
+        }
+      }
+    },
+    "xx.xxx" : {
+
+    }
+  },
+  "version" : "1.1"
+}
