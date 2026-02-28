@@ -6,7 +6,7 @@ import UIKit
 public enum DeepLinkError: Error, LocalizedError {
     case unsupportedScheme
     case failedToOpen
-
+    
     public var errorDescription: String? {
         switch self {
         case .unsupportedScheme: return "Wikipedia app not installed"
@@ -18,29 +18,21 @@ public enum DeepLinkError: Error, LocalizedError {
 public protocol WikipediaDeepLinkProtocol {
     func openPlacesSearch(lat: Double, long: Double) async throws
 }
-  
+
 public struct WikipediaDeepLinkService: WikipediaDeepLinkProtocol {
     public func openPlacesSearch(lat: Double, long: Double) async throws {
         let searchQuery = "nearby matching \"lat = \(lat) , long = \(long)\""
-        let encodedQuery = searchQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let urlString = "wikipedia://places/search?q=\(encodedQuery)"
 
+        guard let encodedQuery = searchQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: "wikipedia://places/search?q=\(encodedQuery)") else {
+            throw DeepLinkError.unsupportedScheme
+        }
 
-        let url = URL(string: urlString)
-    await UIApplication.shared.open(url!)
-//        guard let url = URL(string: urlString),
-//              UIApplication.shared.canOpenURL(url) else {
-//            throw DeepLinkError.unsupportedScheme
-//        }
-//
-//        let opened = await withCheckedContinuation { continuation in
-//            UIApplication.shared.open(url) { success in
-//                continuation.resume(returning: success)
-//            }
-//        }
-//
-//        guard opened else { throw DeepLinkError.failedToOpen }
+        let opened = await UIApplication.shared.open(url)
+        guard opened else {
+            throw DeepLinkError.failedToOpen
+        }
     }
-
+    
     public init() {}
 }

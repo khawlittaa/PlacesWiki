@@ -15,19 +15,18 @@ public enum NetworkError: Error, LocalizedError {
         }
     }
 }
-
 public protocol NetworkClientProtocol {
-    func fetch<T: Decodable>(_ urlString: String, as type: T.Type) async throws -> T
+    func fetch(_ urlString: String) async throws -> Data
 }
 
-public struct NetworkClient: NetworkClientProtocol, @unchecked Sendable {
+public struct NetworkClient: NetworkClientProtocol {
     private let session: URLSession
 
     public init(session: URLSession = .shared) {
         self.session = session
     }
 
-    public func fetch<T: Decodable>(_ urlString: String, as type: T.Type) async throws -> T {
+    public func fetch(_ urlString: String) async throws -> Data {
         guard let url = URL(string: urlString) else {
             throw NetworkError.invalidURL
         }
@@ -38,6 +37,6 @@ public struct NetworkClient: NetworkClientProtocol, @unchecked Sendable {
             throw NetworkError.invalidResponse
         }
 
-        return try JSONDecoder().decode(type, from: data)
+        return data
     }
 }

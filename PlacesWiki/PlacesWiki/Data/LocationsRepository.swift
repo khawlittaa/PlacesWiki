@@ -15,9 +15,9 @@ public struct LocationsRepository: LocationsRepositoryProtocol {
     }
 
     public func fetchLocations() async throws -> [Location] {
-        try await networkClient.fetch(
-            "https://raw.githubusercontent.com/abnamrocoesd/assignment-ios/main/locations.json",
-            as: LocationsResponse.self
-        ).locations
+        let data = try await networkClient.fetch(
+            "https://raw.githubusercontent.com/abnamrocoesd/assignment-ios/main/locations.json"
+        )
+        return try JSONDecoder().decode(LocationsResponse.self, from: data).locations
     }
 }
