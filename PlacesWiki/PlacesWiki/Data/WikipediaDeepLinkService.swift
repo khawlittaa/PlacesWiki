@@ -19,7 +19,7 @@ public protocol WikipediaDeepLinkProtocol {
     func openPlacesSearch(lat: Double, long: Double) async throws
 }
 
-public struct WikipediaDeepLinkService: WikipediaDeepLinkProtocol {
+public struct WikipediaDeepLinkService: WikipediaDeepLinkProtocol, Sendable  {
     public func openPlacesSearch(lat: Double, long: Double) async throws {
         let searchQuery = "nearby matching \"lat = \(lat) , long = \(long)\""
 

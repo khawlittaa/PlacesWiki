@@ -7,7 +7,7 @@ public protocol LocationsRepositoryProtocol {
     func fetchLocations() async throws -> [Location]
 }
 
-public struct LocationsRepository: LocationsRepositoryProtocol {
+public struct LocationsRepository: LocationsRepositoryProtocol, Sendable  {
     private let networkClient: NetworkClientProtocol
 
     public init(networkClient: NetworkClientProtocol = NetworkClient()) {

@@ -36,7 +36,7 @@ struct MainView: View {
 #Preview {
     let locationsVM = LocationsViewModel()
     let customVM = CustomLocationViewModel { _ in }
-    return MainView(
+    MainView(
         locationsViewModel: locationsVM,
         customLocationViewModel: customVM
     )

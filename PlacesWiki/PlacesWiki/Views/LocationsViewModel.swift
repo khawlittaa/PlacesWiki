@@ -15,15 +15,14 @@ public final class LocationsViewModel: ObservableObject {
     
     private let locationsRepository: LocationsRepositoryProtocol
     private let wikipediaService: WikipediaDeepLinkProtocol
-    
-    @MainActor
+
     public init(
         locationsRepository: LocationsRepositoryProtocol = LocationsRepository(),
         wikipediaService: WikipediaDeepLinkProtocol = WikipediaDeepLinkService()
     ) {
         self.locationsRepository = locationsRepository
         self.wikipediaService = wikipediaService
-        
+
         titleText = String(localized: "appTitle")
         loadingText = String(localized: "loadingLocations")
     }
