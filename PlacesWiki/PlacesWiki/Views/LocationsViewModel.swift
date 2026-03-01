@@ -17,8 +17,8 @@ public final class LocationsViewModel: ObservableObject {
     private let wikipediaService: WikipediaDeepLinkProtocol
 
     public init(
-        locationsRepository: LocationsRepositoryProtocol = LocationsRepository(),
-        wikipediaService: WikipediaDeepLinkProtocol = WikipediaDeepLinkService()
+        locationsRepository: LocationsRepositoryProtocol,
+        wikipediaService: WikipediaDeepLinkProtocol
     ) {
         self.locationsRepository = locationsRepository
         self.wikipediaService = wikipediaService

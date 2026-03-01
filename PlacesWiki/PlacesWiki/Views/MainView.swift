@@ -34,7 +34,10 @@ struct MainView: View {
 }
 
 #Preview {
-    let locationsVM = LocationsViewModel()
+    let locationsVM = LocationsViewModel(
+        locationsRepository:  LocationsRepository(),
+        wikipediaService: WikipediaDeepLinkService()
+    )
     let customVM = CustomLocationViewModel { _ in }
     MainView(
         locationsViewModel: locationsVM,

@@ -4,7 +4,7 @@
 import Foundation
 @testable import PlacesWiki
 
-final class MockWikipediaDeepLinkService: WikipediaDeepLinkProtocol {
+final class MockWikipediaDeepLinkService: WikipediaDeepLinkProtocol, @unchecked Sendable {
     var errorToThrow: Error?
     private(set) var openPlacesCalled = false
     private(set) var lastLat: Double?

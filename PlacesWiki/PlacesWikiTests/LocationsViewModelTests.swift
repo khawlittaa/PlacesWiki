@@ -1,33 +1,49 @@
 //  LocationsViewModelTests.swift
 //  PlacesWikiTests
-
 import Testing
-import Foundation
 @testable import PlacesWiki
+import Foundation
 
-@Suite("LocationsViewModel")
 @MainActor
-struct LocationsViewMode {
+struct LocationsViewModelTests {
+
+    private func makeLocations() -> [Location] {[
+        Location(name: "Amsterdam",  lat: 52.3547498, long: 4.8339214),
+        Location(name: "Mumbai",     lat: 19.0823998, long: 72.8111468),
+        Location(name: "Copenhagen", lat: 55.6713442, long: 12.523785),
+        Location(name: nil,          lat: 40.4380638, long: -3.7495758)
+    ]}
+
+    private func makeSUT(
+        repository: MockLocationsRepository = MockLocationsRepository(),
+        wikipedia: MockWikipediaDeepLinkService = MockWikipediaDeepLinkService()
+    ) -> LocationsViewModel {
+        LocationsViewModel(
+            locationsRepository: repository,
+            wikipediaService: wikipedia
+        )
+    }
 
     @Test("Sets locations on successful fetch")
-    func loadLocations_success() async throws {
+    func loadLocations_success() async {
         let mock = MockLocationsRepository()
-        mock.locationsToReturn = [Location(name: "Paris", lat: 48.85, long: 2.35)]
-        let sut = LocationsViewModel(locationsRepository: mock, wikipediaService: MockWikipediaDeepLinkService())
+        mock.locationsToReturn = makeLocations()
+        let sut = makeSUT(repository: mock)
 
         await sut.loadLocations()
 
-        #expect(sut.locations.count == 1)
-        #expect(sut.locations[0].name == "Paris")
+        #expect(sut.locations.count == 4)
+        #expect(sut.locations[0].name == "Amsterdam")
+        #expect(sut.locations[3].name == nil)
         #expect(sut.errorMessage == nil)
         #expect(sut.isLoading == false)
     }
 
     @Test("Sets errorMessage on fetch failure")
-    func loadLocations_failure() async throws {
+    func loadLocations_failure() async {
         let mock = MockLocationsRepository()
         mock.errorToThrow = NetworkError.invalidResponse
-        let sut = LocationsViewModel(locationsRepository: mock, wikipediaService: MockWikipediaDeepLinkService())
+        let sut = makeSUT(repository: mock)
 
         await sut.loadLocations()
 
@@ -36,66 +52,64 @@ struct LocationsViewMode {
         #expect(sut.isLoading == false)
     }
 
-    @Test("Clears stale error message on successful retry")
-    func loadLocations_clearsError_onRetry() async throws {
+    @Test("Clears stale error on successful retry")
+    func loadLocations_clearsErrorOnRetry() async {
         let mock = MockLocationsRepository()
         mock.errorToThrow = NetworkError.invalidResponse
-        let sut = LocationsViewModel(locationsRepository: mock, wikipediaService: MockWikipediaDeepLinkService())
+        let sut = makeSUT(repository: mock)
         await sut.loadLocations()
 
         mock.errorToThrow = nil
-        mock.locationsToReturn = [Location(lat: 0, long: 0)]
+        mock.locationsToReturn = makeLocations()
         await sut.loadLocations()
 
         #expect(sut.errorMessage == nil)
+        #expect(sut.locations.count == 4)
     }
 
     @Test("isLoading is false after load completes")
-    func isLoading_isFalseAfterCompletion() async throws {
-        let sut = LocationsViewModel(
-            locationsRepository: MockLocationsRepository(),
-            wikipediaService: MockWikipediaDeepLinkService()
-        )
+    func isLoadingFalseAfterCompletion() async {
+        let sut = makeSUT()
         await sut.loadLocations()
         #expect(sut.isLoading == false)
     }
 
-    @Test("Appends new location to existing list")
-    func appendCustomLocation() async throws {
+    @Test("Appends custom location to existing list")
+    func appendCustomLocation() async {
         let mock = MockLocationsRepository()
-        mock.locationsToReturn = [Location(name: "Rome", lat: 41.9, long: 12.4)]
-        let sut = LocationsViewModel(locationsRepository: mock, wikipediaService: MockWikipediaDeepLinkService())
+        mock.locationsToReturn = makeLocations()
+        let sut = makeSUT(repository: mock)
         await sut.loadLocations()
 
         sut.appendCustomLocation(Location(name: "Custom", lat: 10, long: 20))
 
-        #expect(sut.locations.count == 2)
+        #expect(sut.locations.count == 5)
         #expect(sut.locations.last?.name == "Custom")
     }
 
     @Test("Calls Wikipedia service with correct coordinates")
-    func openWikipediaPlace_callsService() async throws {
+    func openWikipediaPlace_callsService() async {
         let mockWiki = MockWikipediaDeepLinkService()
-        let sut = LocationsViewModel(locationsRepository: MockLocationsRepository(), wikipediaService: mockWiki)
+        let sut = makeSUT(wikipedia: mockWiki)
+        let amsterdam = Location(name: "Amsterdam", lat: 52.3547498, long: 4.8339214)
 
-        await sut.openWikipediaPlace(for: Location(name: "Berlin", lat: 52.52, long: 13.405))
+        await sut.openWikipediaPlace(for: amsterdam)
 
         #expect(mockWiki.openPlacesCalled == true)
-        #expect(mockWiki.lastLat == 52.52)
-        #expect(mockWiki.lastLong == 13.405)
+        #expect(mockWiki.lastLat == 52.3547498)
+        #expect(mockWiki.lastLong == 4.8339214)
         #expect(sut.isLoading == false)
     }
 
     @Test("Sets errorMessage when Wikipedia service fails")
-    func openWikipediaPlace_setsError() async throws {
+    func openWikipediaPlace_setsError() async {
         let mockWiki = MockWikipediaDeepLinkService()
         mockWiki.errorToThrow = DeepLinkError.failedToOpen
-        let sut = LocationsViewModel(locationsRepository: MockLocationsRepository(), wikipediaService: mockWiki)
+        let sut = makeSUT(wikipedia: mockWiki)
 
-        await sut.openWikipediaPlace(for: Location(lat: 0, long: 0))
+        await sut.openWikipediaPlace(for: Location(name: "Amsterdam", lat: 52.3547498, long: 4.8339214))
 
         #expect(sut.errorMessage == DeepLinkError.failedToOpen.localizedDescription)
         #expect(sut.isLoading == false)
     }
 }
-

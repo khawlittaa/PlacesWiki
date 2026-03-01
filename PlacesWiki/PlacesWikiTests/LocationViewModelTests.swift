@@ -2,51 +2,48 @@
 //  PlacesWikiTests
 
 import Testing
-import Foundation
 @testable import PlacesWiki
 
-@Suite("LocationViewModel")
 @MainActor
 struct LocationViewModelTests {
 
-    @Test("titleText returns location name when present")
+    @Test("titleText returns name when present")
     func titleText_withName() {
-        let sut = LocationViewModel(location: Location(name: "Paris", lat: 0, long: 0))
-        #expect(sut.titleText == "Paris")
+        let sut = LocationViewModel(location: Location(name: "Amsterdam", lat: 52.3547498, long: 4.8339214))
+        #expect(sut.titleText == "Amsterdam")
     }
 
-    @Test("titleText falls back to unnamedLocationText when name is nil")
+    @Test("titleText falls back to unnamedLocationText")
     func titleText_withoutName() {
-        let sut = LocationViewModel(location: Location(name: nil, lat: 0, long: 0))
+        let sut = LocationViewModel(location: Location(name: nil, lat: 40.4380638, long: -3.7495758))
         #expect(sut.titleText == sut.unnamedLocationText)
         #expect(!sut.titleText.isEmpty)
     }
 
-    @Test("coordinatesText contains lat and long values")
+    @Test("coordinatesText contains lat and long")
     func coordinatesText_format() {
-        let sut = LocationViewModel(location: Location(lat: 48.8566, long: 2.3522))
-        #expect(sut.coordinatesText.contains("48.8566"))
-        #expect(sut.coordinatesText.contains("2.3522"))
+        let sut = LocationViewModel(location: Location(name: "Amsterdam", lat: 52.3547498, long: 4.8339214))
+        #expect(sut.coordinatesText.contains("52.3547498"))
+        #expect(sut.coordinatesText.contains("4.8339214"))
     }
 
     @Test("id equals the wrapped location")
     func id_equalsLocation() {
-        let location = Location(name: "Rome", lat: 41.9, long: 12.4)
+        let location = Location(name: "Mumbai", lat: 19.0823998, long: 72.8111468)
         let sut = LocationViewModel(location: location)
         #expect(sut.id == location)
     }
 
     @Test("accessibilityLabel contains formatted coordinates")
     func accessibilityLabel_containsCoordinates() {
-        let sut = LocationViewModel(location: Location(name: "Berlin", lat: 52.5200, long: 13.4050))
-        #expect(sut.accessibilityLabel.contains("52.5200"))
-        #expect(sut.accessibilityLabel.contains("13.4050"))
+        let sut = LocationViewModel(location: Location(name: "Copenhagen", lat: 55.6713442, long: 12.523785))
+        #expect(sut.accessibilityLabel.contains("55.6713"))
+        #expect(sut.accessibilityLabel.contains("12.5238"))
     }
 
-    @Test("accessibilityLabel uses unnamedLocationText when name is nil")
-    func accessibilityLabel_noName() {
-        let sut = LocationViewModel(location: Location(name: nil, lat: 0, long: 0))
+    @Test("accessibilityLabel uses unnamedLocationText for nil name")
+    func accessibilityLabel_nilName() {
+        let sut = LocationViewModel(location: Location(name: nil, lat: 40.4380638, long: -3.7495758))
         #expect(sut.accessibilityLabel.contains(sut.unnamedLocationText))
     }
 }
-

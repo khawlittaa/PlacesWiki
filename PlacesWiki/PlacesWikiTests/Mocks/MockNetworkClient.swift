@@ -7,11 +7,13 @@ import Foundation
 final class MockNetworkClient: NetworkClientProtocol, @unchecked Sendable {
     var dataToReturn: Data?
     var errorToThrow: Error?
-    private(set) var lastFetchedURL: String?
+    private(set) var lastFetchedURL: URL?
 
-    func fetch(_ urlString: String) async throws -> Data {
-        lastFetchedURL = urlString
+    func fetch(_ url: URL) async throws -> Data {
+        lastFetchedURL = url
         if let error = errorToThrow { throw error }
         return dataToReturn ?? Data()
     }
 }
+
+final class BundleToken {}

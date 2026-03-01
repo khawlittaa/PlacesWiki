@@ -2,9 +2,8 @@
 //  PlacesWiki
 
 import Foundation
-import Foundation
 
-public enum NetworkError: Error, LocalizedError {
+public enum NetworkError: Error, LocalizedError, Sendable {
     case invalidURL
     case invalidResponse
 
@@ -15,8 +14,9 @@ public enum NetworkError: Error, LocalizedError {
         }
     }
 }
-public protocol NetworkClientProtocol {
-    func fetch(_ urlString: String) async throws -> Data
+
+public protocol NetworkClientProtocol: Sendable {
+    func fetch(_ url: URL) async throws -> Data
 }
 
 public struct NetworkClient: NetworkClientProtocol {
@@ -26,17 +26,15 @@ public struct NetworkClient: NetworkClientProtocol {
         self.session = session
     }
 
-    public func fetch(_ urlString: String) async throws -> Data {
-        guard let url = URL(string: urlString) else {
+    public func fetch(_ url: URL) async throws -> Data {
+        guard url.scheme == "http" || url.scheme == "https" else {
             throw NetworkError.invalidURL
         }
-
         let (data, response) = try await session.data(from: url)
         guard let httpResponse = response as? HTTPURLResponse,
               200...299 ~= httpResponse.statusCode else {
             throw NetworkError.invalidResponse
         }
-
         return data
     }
 }

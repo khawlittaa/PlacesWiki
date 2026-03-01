@@ -1,11 +1,10 @@
 //  MockLocationsRepository.swift
 //  PlacesWikiTests
 
-
 import Foundation
 @testable import PlacesWiki
 
-final class MockLocationsRepository: LocationsRepositoryProtocol {
+final class MockLocationsRepository: LocationsRepositoryProtocol, @unchecked Sendable {
     var locationsToReturn: [Location] = []
     var errorToThrow: Error?
     private(set) var fetchCalled = false

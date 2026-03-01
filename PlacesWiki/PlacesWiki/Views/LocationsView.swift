@@ -23,5 +23,8 @@ struct LocationsView: View {
 }
 
 #Preview {
-    LocationsView(viewModel: LocationsViewModel())
+    LocationsView(viewModel: LocationsViewModel(
+        locationsRepository: LocationsRepository(),
+        wikipediaService: WikipediaDeepLinkService()
+    ))
 }
